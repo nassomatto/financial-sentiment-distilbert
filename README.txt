@@ -1,3 +1,7 @@
+This Document was retrieved from HuggingFace official webstie:
+https://huggingface.co/vivekkopthsd/financial-sentiment-distilbert
+
+
 ===========================================================
 
    Documentation for Financial Phrase Bank v.1.0
