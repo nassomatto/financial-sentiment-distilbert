@@ -42,6 +42,11 @@ print(train_token)
 
 """
 MODEL
+
+Consists of:
+- Body(pretrained) with 6 transformer layers, for each sentence it produces a vector of 768 numbers.
+- Head: pre-classifier: a linear layer, 768->768, ReLU and dropout.
+        and classifier: a linear layer, 768->3. outputs the logits.
 """
 model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=3)
 # gives us the pretrained DistilBERT body + fresh classification head.
@@ -89,7 +94,21 @@ trainer.evaluate()
 
 trainer.save_model("./results")
 
+"""
+OUTPUT OF THIS FILE
 
+Training saves the fine-tuned model to ./results/checkpoint-453/ (a folder):
+
+  - model.safetensors  : the trained weights (body + classification head)
+  - config.json        : architecture settings, including num_labels=3
+  - tokenizer files    : so text is tokenized exactly as during training
+  - optimizer.pt, scheduler.pt, rng_state.pth : only needed to resume training
+  - trainer_state.json : log of per-epoch eval scores
+
+analysis.py loads the model from this folder, so it doesn't need to retrain.
+Rerunning this file retrains from scratch and overwrites the checkpoint.
+
+"""
 
 
     

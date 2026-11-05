@@ -37,7 +37,7 @@ print("\nExtra:\n",df.head())
 print(df['label'].value_counts(normalize=True)*100) # shows proportion of specific label/total 
 print(df['sentence'].duplicated().sum(),"\n\n")
 #output: 5
-#check them
+#check them 
 print(df[df[['sentence', 'label']].duplicated(keep=False)])
 df = df.drop_duplicates()   #drop duplicates
 
@@ -49,13 +49,14 @@ print("\n\nInfo of words of a sentence:\n", df['sentence'].str.split().str.len()
 # 25.7% - positive
 # 12.2% - negative.
 
-# This means, when we split the dataset into 3 piles(train, valid, test), we should split the sentences from each category keeping the same proportions of the main dataset.
+# This means, when we split the dataset into 3 piles(train, valid, test), 
+# we should split the sentences from each category keeping the same proportions of the main dataset.
 
 
 """SPLITTING THE DATA
 
 # 1. Create a sample dataset with 3 target categories (neutral, positive, neagative)
-# Target distribution: % Class 0 - 26%, Class 1 - 62%, Class 2 - 12%
+# Target distribution: % Class 0(neg) - 12%, Class 1(neutral) - 62%, Class 2(pos) - 26% 
 
     total rows: 3448
     stratifying them: 70/15/15 — train ~2,414, val ~517, test ~517
@@ -65,7 +66,7 @@ print("\n\nInfo of words of a sentence:\n", df['sentence'].str.split().str.len()
 #proportion = df['label'].value_counts(normalize=True)
 
 # prep
-df['label'] = df['label'].map({'negative':0, 'neutral':1, 'positive':2})
+df['label'] = df['label'].map({'negative':0, 'neutral':1, 'positive':2}) #renames the values 
 
 # splitting
 from sklearn.model_selection import train_test_split
@@ -75,25 +76,27 @@ train_valid, test = train_test_split(
     df, test_size=0.15, stratify=df["label"], random_state=42
 )
 
-
 #second split the train into train and validation (0.176 because 15% of original is 0.176% of train_val)
 train, val = train_test_split(
     train_valid, test_size=0.176, stratify=train_valid['label'], random_state=42
 )
-
-
 
 for name, d in [("train", train), ("val", val), ("test", test)]:
     print(name, len(d))
     print(d['label'].value_counts(normalize=True))
 
 """
-BASELINES - Two simple models:
+We're gonna run TWO models to check how the dataset works 
+and later on compare our main NLP model to these basic statistic ones.
 
-1. Construct a prediction array of all 1s (neutral), same length as the test set.
+BASELINES:
+
+1. No Model
+Construct a prediction array of all 1s (neutral), same length as the test set.
 Score with accuracy_score and f1_score(average='macro'). No training, no model object.
 
-2. Fit TfidfVectorizer on train['sentence'], transform val and test with it. Fit LogisticRegression on the resulting train matrix and train['label']. 
+2. Logistic Regression
+Fit TfidfVectorizer on train['sentence'], transform val and test with it. Fit LogisticRegression on the resulting train matrix and train['label']. 
 Predict on the test matrix. Score with classification_report for per-class and macro F1.
 """
 
