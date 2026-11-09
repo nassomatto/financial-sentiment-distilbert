@@ -1,25 +1,25 @@
-sentence,truth,predicted,category
-"At 10.33 am , Huhtamaki was the market 's biggest faller , 8.69 pct lower at 11.35 eur , while the OMX Helsinki 25 was 0.32 pct higher at 3,332.41 , and the OMX Helsinki was up 0.47 pct at 11,687.32 .",negative,positive,numbers
-"The first installment of the Cinema Series concludes with a profile of Finnish inventor Olavi Linden , whose personal artistic journey and work at Fiskars has led to dozens of design awards .",neutral,positive,fluct_word
-Russia wants to utilise its huge forest reserves in a very different way from what has been done so far .,neutral,positive,fluct_word
-The air traffic of Finland has been in stoppage since then .,negative,neutral,missing_ctxt
-"In a letter to Economic Affairs Minister , the listed Estonian shipping company Tallink asks for the approval to be entitled to a 15 % cut in port fees in 2010 .",neutral,positive,plan
-"Key shareholders of Finnish IT services provider TietoEnator Oyj on Friday rejected a hostile EUR1 .08 billion $ 1.67 billion offer from buyout shop Nordic Capital , giving new life to a possible counter offer from Blackstone Group LP and Norwegian telecom Telenor ASA .",positive,negative,fluct_word
-"According to Gallup Food and Farm Facts , beef consumption totaled 99mn kilos in Finland in 2007 .",neutral,positive,other
-"( ADPnews ) - Oct 21 , 2009 - Finland-based IT consultancy Tieto Oyj ( HEL : TIE1V ) said today its net profit plunged to EUR 29.4 million ( USD 43.9 m ) for the first nine months of 2009 from EUR 58.7 million for the same period o",negative,positive,other
-fi is developing cooperation in keyword advertising with Microsoft .,positive,neutral,missing_ctxt
-"`` The industry is coming to an interesting fork in the road as both handset manufacturers and wireless carriers attempt to serve as the portal for Web-based service to your wireless handset , '' he wrote .",neutral,positive,plan
-The dismissed staff members will now take the matter to court unless it can be settled outside .,negative,neutral,other
-"However , the total orders received will still be above last year s levels .",positive,neutral,missing_ctxt
-"It is necessary to strengthen the company 's operations , however .",neutral,positive,missing_ctxt
-Chief executive officer Olli-Pekka Kallasvuo 's changes on Tuesday mark the third time in nine months the company has reshuffled executives and operations as Nokia loses ground to Apple 's iPhone and RIM 's BlackBerry .,negative,positive,other
-Pretax loss totaled EUR 117mn compared to a loss of EUR 65mn in the corresponding period .,negative,positive,numbers
-"Finnish publisher Alma Media ( HEL : ALN1V ) said Wednesday it has decided to further extend its EUR1 .85 ( USD2 .75 ) apiece mandatory tender offer for media group Talentum ( HEL : TTM1V ) , which started on 19 August , until 16 November .",neutral,positive,other
-The company plans to expand into the international market through its subsidiaries and distributors from 2011 onwards .,positive,neutral,other
-"This location makes the mall a convenient place to shop for consumers from three large residential areas nearby : Jaroszowka , Wysockiego and Zgody .",positive,neutral,other
-Finnish publishing and printing group Ilkka-Yhtym+ñ will introduced a staff smoking ban as of the beginning of 2007 at the company 's three newspapers .,neutral,negative,other
-"However , the broker gave an `` outperform '' recommendation on the stock .",positive,negative,missing_ctxt
-"ST. PETERSBURG , Oct 14 ( PRIME-TASS ) -- Finnish tire producer Nokian Tyres plans to invest about 50 million euros in the expansion of its tire plant in the city of Vsevolozhsk in Russia 's Leningrad Region in 2011 , the company 's President Kim Gran told reporters Thursday .",positive,neutral,debate
-"`` After this purchase , Cramo will become the second largest rental services provider in the Latvian market .",positive,neutral,numbers
-The board further said the company omitted to tender for a substantial part of the works and as such they had rightfully been found non-responsive by the evaluation team .,neutral,negative,fluct_word
-EMSA Deputy Chairman of the Board Juri Lember told BNS on Wednesday that this was the first time he heard about the strike as the Swedish side had not informed the Estonian union yet .,negative,neutral,debate
+sentence,truth,predicted
+"At 10.33 am , Huhtamaki was the market 's biggest faller , 8.69 pct lower at 11.35 eur , while the OMX Helsinki 25 was 0.32 pct higher at 3,332.41 , and the OMX Helsinki was up 0.47 pct at 11,687.32 .",negative,positive
+"The first installment of the Cinema Series concludes with a profile of Finnish inventor Olavi Linden , whose personal artistic journey and work at Fiskars has led to dozens of design awards .",neutral,positive
+Russia wants to utilise its huge forest reserves in a very different way from what has been done so far .,neutral,positive
+The air traffic of Finland has been in stoppage since then .,negative,neutral
+"In a letter to Economic Affairs Minister , the listed Estonian shipping company Tallink asks for the approval to be entitled to a 15 % cut in port fees in 2010 .",neutral,positive
+"Key shareholders of Finnish IT services provider TietoEnator Oyj on Friday rejected a hostile EUR1 .08 billion $ 1.67 billion offer from buyout shop Nordic Capital , giving new life to a possible counter offer from Blackstone Group LP and Norwegian telecom Telenor ASA .",positive,negative
+"According to Gallup Food and Farm Facts , beef consumption totaled 99mn kilos in Finland in 2007 .",neutral,positive
+"( ADPnews ) - Oct 21 , 2009 - Finland-based IT consultancy Tieto Oyj ( HEL : TIE1V ) said today its net profit plunged to EUR 29.4 million ( USD 43.9 m ) for the first nine months of 2009 from EUR 58.7 million for the same period o",negative,positive
+fi is developing cooperation in keyword advertising with Microsoft .,positive,neutral
+"`` The industry is coming to an interesting fork in the road as both handset manufacturers and wireless carriers attempt to serve as the portal for Web-based service to your wireless handset , '' he wrote .",neutral,positive
+The dismissed staff members will now take the matter to court unless it can be settled outside .,negative,neutral
+"However , the total orders received will still be above last year s levels .",positive,neutral
+"It is necessary to strengthen the company 's operations , however .",neutral,positive
+Chief executive officer Olli-Pekka Kallasvuo 's changes on Tuesday mark the third time in nine months the company has reshuffled executives and operations as Nokia loses ground to Apple 's iPhone and RIM 's BlackBerry .,negative,positive
+Pretax loss totaled EUR 117mn compared to a loss of EUR 65mn in the corresponding period .,negative,positive
+"Finnish publisher Alma Media ( HEL : ALN1V ) said Wednesday it has decided to further extend its EUR1 .85 ( USD2 .75 ) apiece mandatory tender offer for media group Talentum ( HEL : TTM1V ) , which started on 19 August , until 16 November .",neutral,positive
+The company plans to expand into the international market through its subsidiaries and distributors from 2011 onwards .,positive,neutral
+"This location makes the mall a convenient place to shop for consumers from three large residential areas nearby : Jaroszowka , Wysockiego and Zgody .",positive,neutral
+Finnish publishing and printing group Ilkka-Yhtym+ñ will introduced a staff smoking ban as of the beginning of 2007 at the company 's three newspapers .,neutral,negative
+"However , the broker gave an `` outperform '' recommendation on the stock .",positive,negative
+"ST. PETERSBURG , Oct 14 ( PRIME-TASS ) -- Finnish tire producer Nokian Tyres plans to invest about 50 million euros in the expansion of its tire plant in the city of Vsevolozhsk in Russia 's Leningrad Region in 2011 , the company 's President Kim Gran told reporters Thursday .",positive,neutral
+"`` After this purchase , Cramo will become the second largest rental services provider in the Latvian market .",positive,neutral
+The board further said the company omitted to tender for a substantial part of the works and as such they had rightfully been found non-responsive by the evaluation team .,neutral,negative
+EMSA Deputy Chairman of the Board Juri Lember told BNS on Wednesday that this was the first time he heard about the strike as the Swedish side had not informed the Estonian union yet .,negative,neutral
