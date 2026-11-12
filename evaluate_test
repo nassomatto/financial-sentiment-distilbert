@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+from transformers import  Trainer, AutoTokenizer, AutoModelForSequenceClassification
+from datasets import load_dataset
+from pathlib import Path
+
+# folder this file lives in, so the CSVs are found no matter where the script is run from
+DATA_DIR = Path(__file__).resolve().parent
+
+"""
+IMPORT OUR DATASETS
+"""
+dataset = load_dataset("csv", 
+                       data_files = {
+                             "test" : str(DATA_DIR / "test.csv")
+                       }  
+)
+
+
+
+
+
+
+
+"""
+TOKENIZE TEST SET
+"""

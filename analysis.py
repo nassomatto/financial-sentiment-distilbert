@@ -10,8 +10,7 @@ DATA_DIR = Path(__file__).resolve().parent
 
 #load datasets
 ds = load_dataset("csv", data_files={
-      "val": str(DATA_DIR / "val.csv"),
-      #"test": str(DATA_DIR / "test.csv"),
+      "val": str(DATA_DIR / "val.csv")
 })
 
 #load model content into this script
@@ -23,12 +22,12 @@ model = AutoModelForSequenceClassification.from_pretrained(model_path)
 TOKENIZER
 """
 def tokenize(batch):
-      return tokenizer(batch["sentence"], truncation=True, max_length=128)
+      return tokenizer(batch["sentence"], truncation=True, max_length=128) #max # of tokens = 128, if exceed - cut.
 
 
-# tokenizing val and test sets
-valid_token = ds["val"].map(tokenize, batched=True)
-#test_token = ds["test"].map(tokenize, batched=True)
+# tokenizing validation set
+valid_token = ds["val"].map(tokenize, batched=True) #batched=True -> makes .map process the batch as a whole, not sentence by sentence
+
 
 """
 TRAINER AND RUNS

@@ -8,6 +8,8 @@ from sklearn.metrics import accuracy_score, f1_score
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
+from sklearn.pipeline import Pipeline
+import joblib # for transferring pipeline
 
 
 """
@@ -85,6 +87,8 @@ for name, d in [("train", train), ("val", val), ("test", test)]:
     print(name, len(d))
     print(d['label'].value_counts(normalize=True))
 
+
+
 """
 We're gonna run TWO models to check how the dataset works 
 and later on compare our main NLP model to these basic statistic ones.
@@ -121,12 +125,11 @@ documents = train["sentence"]
 # For training set
 # vectorizing -> getting a tf-idf matrix 
 X_train = vectorizer.fit_transform(documents)
-#print(documents.head(),"\n", X_train)
 
 #For validation set
 X_val = vectorizer.transform(val["sentence"])
 print("\nOutput for baseline 2:")
-#print("\nOutput for baseline 2:\nX_val shape: ",X_val.shape)
+
 
 
 # Classification
@@ -149,12 +152,45 @@ Explanation of the output: The baseline 2 model has a macro of 0.74, which is no
 model_balanced = LogisticRegression(class_weight='balanced')
 model_balanced.fit(X_train, train["label"])
 y_pred_balanced = model_balanced.predict(X_val)
-print(classification_report(val["label"], y_pred_balanced))
+print("\Balanced Logistic Regression:\n",classification_report(val["label"], y_pred_balanced))
 
 """
-We used *lass_weight='balanced'* to adjust the contribution to errors more balanced. For class neutral, as it has more rows, thus contributing more to the error while training, meaning one error of class Neutral costs much more then the error of ither class. So we neutrilize this imbalance by adjusting weights to the contirubtions to the loss:
+We used *class_weight='balanced'* to adjust the contribution to errors more balanced. For class neutral, as it has more rows, thus contributing more to the error while training, meaning one error of class Neutral costs much more then the error of either class. 
+So we neutrilize this imbalance by adjusting weights to the contirubtions to the loss:
 weight = n_samples / (n_classes × n_samples_in_class)
 """
+
+
+"""
+CREATING A PIPELINE FOR FUTURE USE
+
+sklearn's Pipeline will consist of TF-IDF Vectorizer -> LogisticRegression(balanced) 
+"""
+
+# Split the data into (X) and (y)
+X1_train, y1_train = train["sentence"], train["label"]
+X1_val, y1_val = val["sentence"], val["label"]
+
+
+#Defining pipeline 
+pipe = Pipeline([
+    ('vectorizer', TfidfVectorizer()),
+    ('log_regression_balanced', LogisticRegression(class_weight="balanced"))
+])
+
+pipe.fit(X1_train, y1_train) 
+predictions = pipe.predict(X1_val)
+
+
+joblib.dump(pipe, DATA_DIR/'pipeline.joblib')
+
+
+
+
+
+
+
+
 
 
 
