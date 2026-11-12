@@ -145,7 +145,6 @@ print("\n Report for regular LR:\n", classification_report(val["label"], predict
       "\n Report for balanced LR'n", classification_report(val["label"], predictions_2))
 
 
-
 """
 Explanation of the output: The baseline 2 model has a macro of 0.74, which is not bad. 
 The problem is, the recall of both negative and positive is basically low. That means, the model overclassifies(relies) a sentence more for Neutral, missing its real classes.

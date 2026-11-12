@@ -17,23 +17,28 @@ ds = load_dataset("csv", data_files = {
 
 
 model_path = DATA_DIR/"results"/"checkpoint-453"
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForSequenceClassification.from_pretrained(model_path)
 
-"""
-TOKENIZER
-"""
-def tokenize(batch):
-      return tokenizer(batch["sentence"], truncation=True, max_length=128) 
-
-
-# tokenizing test set
-test_token = ds["test"].map(tokenize, batched=True) 
-test = ds["test"]
 
 """
 LOADING BACK THE BASELINE MODEL (TF-IDF Vectorizer + Logistic Regression(balanced))
 """
 pipe = joblib.load(DATA_DIR/"pipeline.joblib")
 
-print(pipe.predict(test["sentence"]))
+preds = pipe.predict(ds['test']['sentence'])
+
+print(classification_report(ds['test']['label'], preds), "\n\n")
+
+"""
+TOKENIZER
+"""
+
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+def tokenize(batch):
+      return tokenizer(batch['sentence'], truncation=True, max_length=128)
+
+test_token = ds['test'].map(tokenize, batch=True)
+
+"""
+TRAINER AND RUNS
+"""
