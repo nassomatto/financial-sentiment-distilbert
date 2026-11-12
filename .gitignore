@@ -1,5 +1,6 @@
 results/
 final_model/
+pipeline.joblib/
 tmp_trainer/
 tempCodeRunnerFile.py
 Sentences_66Agree.txt/

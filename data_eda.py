@@ -88,7 +88,6 @@ for name, d in [("train", train), ("val", val), ("test", test)]:
     print(d['label'].value_counts(normalize=True))
 
 
-
 """
 We're gonna run TWO models to check how the dataset works 
 and later on compare our main NLP model to these basic statistic ones.
@@ -102,10 +101,12 @@ Score with accuracy_score and f1_score(average='macro'). No training, no model o
 2. Logistic Regression
 Fit TfidfVectorizer on train['sentence'], transform val and test with it. Fit LogisticRegression on the resulting train matrix and train['label']. 
 Predict on the test matrix. Score with classification_report for per-class and macro F1.
+
+Added Pipeline for TD-IDF Vectorizer -> balanced LogisticRegression for fitire use. 
 """
 
 
-#1 Baseline 1 - all 3448 rows with "negative label"
+#1 Baseline 1 - all 3448 rows with "negative" label
 base1_prediction = len(val) * [1] 
 truth1 = val['label']
 print("\n\n\nOutput for Baseline 1:\n")
@@ -117,80 +118,46 @@ print("Accuracy score:", accuracy_score(truth1, base1_prediction),"  F1 score:",
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-#init. vectorizer
-vectorizer = TfidfVectorizer()
-#defining documents
-documents = train["sentence"]
+# assigning data to training and validation sets
+X1_train, y_train = train["sentence"], train["label"]
+X1_val = val["sentence"]
 
-# For training set
-# vectorizing -> getting a tf-idf matrix 
-X_train = vectorizer.fit_transform(documents)
-
-#For validation set
-X_val = vectorizer.transform(val["sentence"])
-print("\nOutput for baseline 2:")
-
-
-
-# Classification
-#Initialize and fit Logistic Regression
-model = LogisticRegression()
-model.fit(X_train, train["label"])
-
-#Predict
-y_pred = model.predict(X_val)
-y_pred_proba = model.predict_proba(X_val)
-
-#Score
-print(classification_report(val["label"], y_pred))
-
-"""
-Explanation of the output: The baseline 2 model has a macro of 0.74, which is not bad. The problem is, the recall of both negative and positive is basically low. That means, the model overclassifies(relies) a sentence more for Neutral, missing its real classes.
-"""
-
-# Counteract the model's tendency to default to majority class
-model_balanced = LogisticRegression(class_weight='balanced')
-model_balanced.fit(X_train, train["label"])
-y_pred_balanced = model_balanced.predict(X_val)
-print("\Balanced Logistic Regression:\n",classification_report(val["label"], y_pred_balanced))
-
-"""
-We used *class_weight='balanced'* to adjust the contribution to errors more balanced. For class neutral, as it has more rows, thus contributing more to the error while training, meaning one error of class Neutral costs much more then the error of either class. 
-So we neutrilize this imbalance by adjusting weights to the contirubtions to the loss:
-weight = n_samples / (n_classes × n_samples_in_class)
-"""
-
-
-"""
-CREATING A PIPELINE FOR FUTURE USE
-
-sklearn's Pipeline will consist of TF-IDF Vectorizer -> LogisticRegression(balanced) 
-"""
-
-# Split the data into (X) and (y)
-X1_train, y1_train = train["sentence"], train["label"]
-X1_val, y1_val = val["sentence"], val["label"]
-
-
-#Defining pipeline 
 pipe = Pipeline([
-    ('vectorizer', TfidfVectorizer()),
-    ('log_regression_balanced', LogisticRegression(class_weight="balanced"))
+    ('Vectorizer', TfidfVectorizer()),
+    ('Logistic Regression', LogisticRegression())
 ])
 
-pipe.fit(X1_train, y1_train) 
-predictions = pipe.predict(X1_val)
+pipe_balanced = Pipeline([
+    ('Vectorizer', TfidfVectorizer()),
+    ('Logistic Regression', LogisticRegression(class_weight='balanced'))
+])
+
+pipe.fit(X1_train, y_train)
+predictions_1 = pipe.predict(X1_val)
+
+pipe_balanced.fit(X1_train, y_train)
+predictions_2 = pipe_balanced.predict(X1_val)
+joblib.dump(pipe_balanced, DATA_DIR/"pipeline.joblib")
 
 
-joblib.dump(pipe, DATA_DIR/'pipeline.joblib')
+print("\n\n\nOutput for Baseline 2:\n")
+print("\n Report for regular LR:\n", classification_report(val["label"], predictions_1), 
+      "\n Report for balanced LR'n", classification_report(val["label"], predictions_2))
 
 
 
+"""
+Explanation of the output: The baseline 2 model has a macro of 0.74, which is not bad. 
+The problem is, the recall of both negative and positive is basically low. That means, the model overclassifies(relies) a sentence more for Neutral, missing its real classes.
 
+With Balanced Logistic Regression: 
+it counteracts the model's tendency to default to majority class
 
-
-
-
+We used *class_weight='balanced'* to adjust the contribution to errors more balanced. For class neutral, as it has more rows, thus contributing more to the error while training,
+meaning one error of class Neutral costs much more then the error of either class. 
+So we neutrilize this imbalance by adjusting weights to the contirubtions to the loss:
+weight = n_samples / (n_classes * n_samples_in_class)
+"""
 
 
 
