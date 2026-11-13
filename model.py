@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import torch
+from utils import DATA_DIR
 
 from datasets import load_dataset
 from transformers import (
@@ -16,8 +17,6 @@ from pathlib import Path
 
 
 
-# folder this file lives in, so the CSVs are found no matter where the script is run from
-DATA_DIR = Path(__file__).resolve().parent
 
 ds = load_dataset("csv", data_files={
     "train": str(DATA_DIR / "train.csv"),

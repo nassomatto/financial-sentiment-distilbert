@@ -1,68 +1,41 @@
 import pandas as pd
 import numpy as np
-from transformers import  Trainer, AutoTokenizer, AutoModelForSequenceClassification
-from datasets import load_dataset
-from pathlib import Path
-from sklearn.metrics import f1_score, accuracy_score, classification_report, confusion_matrix
+from utils import load_split, load_bert, predict_bert, score, LABEL_NAMES, DATA_DIR
 
-# folder this file lives in, so the CSVs are found no matter where the script is run from
-DATA_DIR = Path(__file__).resolve().parent
+
 
 #load datasets
-ds = load_dataset("csv", data_files={
-      "val": str(DATA_DIR / "val.csv")
-})
-
-#load model content into this script
-model_path = DATA_DIR/"results"/"checkpoint-453"
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForSequenceClassification.from_pretrained(model_path)
-
-"""
-TOKENIZER
-"""
-def tokenize(batch):
-      return tokenizer(batch["sentence"], truncation=True, max_length=128) #max # of tokens = 128, if exceed - cut.
-
-
-# tokenizing validation set
-valid_token = ds["val"].map(tokenize, batched=True) #batched=True -> makes .map process the batch as a whole, not sentence by sentence
+val = load_split('val')
 
 
 """
-TRAINER AND RUNS
+TOKENIZER + TRAINER AND RUNS
 """
-trainer = Trainer(
-      model,
-      processing_class=tokenizer,
-)
 
-validation_results = trainer.predict(valid_token)
+# retreive the tokenizer and the model from checkpoint folder
+tokenizer, model = load_bert()
+
+# return predicted class IDs for each sentence in Dataset
+# output: np.array of integers [0,2] for each sentence. Length of the list = n (number of sentences)
+preds = predict_bert(model, tokenizer, val) 
+
 
 """
 ERROR ANALYSIS
 """
-preds = np.argmax(validation_results.predictions, axis=-1)
-labels = validation_results.label_ids
-accuracy = accuracy_score(labels, preds)
-macro_f1 = f1_score(labels, preds, average="macro")
-
-print(accuracy, "\n", macro_f1)
-
-
-print(classification_report(labels, preds, target_names = ["negative", "neutral", "positive"]))
-print(confusion_matrix(labels, preds))
+score("DistilBERT validation set", val['label'], preds)
 
 
 # Check the missclassified sentences 
 
-df = valid_token.to_pandas()
-df["truth"] = labels
+df = val.to_pandas()
+df = df.rename(columns={'label':'truth'})
 df["predicted"] = preds
+
 df_clean = df[["sentence","truth", "predicted"]]
 
 
-print(df_clean.head())
+print("\n\nHead of the dataset with 3 neede columns: \n",df_clean.head())
 
 #filter down the missclassified 
 df_missed = df_clean[df_clean["truth"] != df_clean["predicted"]].copy()
@@ -90,16 +63,16 @@ I've added a column named 'category' to manually label what type of mismatch hap
 """
 
 
-df_tagged = pd.read_csv(DATA_DIR/"misclassified_val_tagged.csv")
+df_tagged = pd.read_csv(DATA_DIR/"misclassified_val_tagged.csv") #dataset of missed sentences with labels on them
 
-print("\n\n", df_tagged.value_counts("category"), "\n")
+print("\n\nCounts of missclassifications", df_tagged.value_counts("category"), "\n")
 
 # adding crosstab
 # A crosstab is a table that counts combinations of two columns.
 # One column’s values become the rows, the other’s become the columns,
 # and each cell counts how many rows have that pair.
 pd.set_option("display.max_columns", None)
-print(pd.crosstab(df_tagged["category"], df_tagged["truth"] + "->" + df_tagged["predicted"]))
+print("\n-------------------CROSSTAB--------------------\n",pd.crosstab(df_tagged["category"], df_tagged["truth"] + "->" + df_tagged["predicted"]))
 
 """
 Debate: 2 errors. label noise. 

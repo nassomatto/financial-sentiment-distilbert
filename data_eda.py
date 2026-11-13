@@ -1,11 +1,9 @@
 import pandas as pd
+import numpy as np
 from pathlib import Path
-
-# folder this file lives in, so the data files are found no matter where the script is run from
-DATA_DIR = Path(__file__).resolve().parent
+from utils import DATA_DIR, BASELINE_PATH
 
 from sklearn.metrics import accuracy_score, f1_score
-import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline
@@ -23,13 +21,20 @@ by takala: https://huggingface.co/takala
 link: https://huggingface.co/datasets/takala/financial_phrasebank
 """
 
+
+
+"""
+RAW DATA PROCESSING
+"""
 # Check how many rows each agreement-sentence file contains 
 for tier in ["50Agree", "66Agree", "75Agree", "AllAgree"]:
     df = pd.read_csv(DATA_DIR / f"Sentences_{tier}.txt", sep="@",
                      names=["sentence", "label"], encoding="latin-1")
     print(tier,"  Number of rows ", df.shape[0])
 
-# EDA of Sentence_75. Decided work on 75% fin. experts agree, as the highest agreement rate and number of rows greater than the "AllAgree" text.
+# EDA of Sentence_75. Decided work on 75% fin. experts agree, 
+# as the highest agreement rate and number of rows larger than the "AllAgree" text.
+
 df = pd.read_csv(DATA_DIR / "Sentences_75Agree.txt", sep="@", names=["sentence", "label"], encoding="latin-1")
 print("\nAbout Sentences_75Agree.txt - dimensions: ", df.shape,"\n", df.describe(include="object"), "\n")
 df.info()
@@ -84,7 +89,7 @@ train, val = train_test_split(
 )
 
 for name, d in [("train", train), ("val", val), ("test", test)]:
-    print(name, len(d))
+    print("\nDATASET ",name, len(d))
     print(d['label'].value_counts(normalize=True))
 
 
@@ -137,7 +142,7 @@ predictions_1 = pipe.predict(X1_val)
 
 pipe_balanced.fit(X1_train, y_train)
 predictions_2 = pipe_balanced.predict(X1_val)
-joblib.dump(pipe_balanced, DATA_DIR/"pipeline.joblib")
+joblib.dump(pipe_balanced, BASELINE_PATH)
 
 
 print("\n\n\nOutput for Baseline 2:\n")

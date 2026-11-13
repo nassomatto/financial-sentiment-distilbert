@@ -1,44 +1,49 @@
 import pandas as pd
 import numpy as np
-from transformers import  Trainer, AutoTokenizer, AutoModelForSequenceClassification
-from datasets import load_dataset
-from pathlib import Path
-from sklearn.metrics import f1_score, accuracy_score, classification_report, confusion_matrix
+from utils import load_split, load_bert, predict_bert, score, LABEL_NAMES, DATA_DIR
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.pipeline import Pipeline
 import joblib
 
-
-# folder this file lives in, so the CSVs are found no matter where the script is run from
-DATA_DIR = Path(__file__).resolve().parent
-
-# Load dataset
-ds = load_dataset("csv", data_files = {
-      "test": str(DATA_DIR/"test.csv")
-      })
-
-
-model_path = DATA_DIR/"results"/"checkpoint-453"
+test = load_split('test') # load test set
 
 
 """
-LOADING BACK THE BASELINE MODEL (TF-IDF Vectorizer + Logistic Regression(balanced))
+LOADING BACK THE BASELINE MODELS (1. Majority baseline 2.TF-IDF Vectorizer + Logistic Regression(balanced))
 """
+
+#1 Baseline 1 - all 3448 rows with "negative" label
+baseline1_prediction = len(test) * [1] 
+
+#2 Baseline 2
 pipe = joblib.load(DATA_DIR/"pipeline.joblib")
 
-preds = pipe.predict(ds['test']['sentence'])
-
-print(classification_report(ds['test']['label'], preds), "\n\n")
+preds_baseline = pipe.predict(test['sentence'])
 
 """
-TOKENIZER
+TOKENIZER + TRAINER AND RUNS
 """
+tokenizer, model = load_bert()
+preds = predict_bert(model, tokenizer, test)
 
-tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-def tokenize(batch):
-      return tokenizer(batch['sentence'], truncation=True, max_length=128)
-
-test_token = ds['test'].map(tokenize, batch=True)
 
 """
-TRAINER AND RUNS
+FINAL ASSESSMENT
 """
+results = []
+
+predictions_by_model = {'Majority Class Report' : len(test) * [1],
+               'TF-IDF LogReg(balanced) Report' : preds_baseline,
+               'DistilBERT': preds
+               }
+
+for key, value in predictions_by_model.items():
+      results.append(score(key, test['label'], value))
+
+df = pd.DataFrame(results)
+print(df.round(3))      
+df.to_csv(DATA_DIR / "test_results.csv", index=False)
+
+
