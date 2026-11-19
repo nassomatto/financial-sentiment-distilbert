@@ -47,3 +47,13 @@ print(df.round(3))
 df.to_csv(DATA_DIR / "test_results.csv", index=False)
 
 
+
+# Saving individual prediction columns
+test_preds_df = pd.DataFrame({
+      'true':test['label'],
+      'predicted':preds
+})
+
+test_preds_df.to_csv(DATA_DIR / "test-predictions.csv", index=False)
+
+
