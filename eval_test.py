@@ -1,9 +1,5 @@
 import pandas as pd
-import numpy as np
-from utils import load_split, load_bert, predict_bert, score, LABEL_NAMES, DATA_DIR
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
-from sklearn.pipeline import Pipeline
+from utils import load_split, load_bert, predict_bert, score, DATA_DIR, BASELINE_PATH
 import joblib
 
 test = load_split('test') # load test set
@@ -17,7 +13,7 @@ LOADING BACK THE BASELINE MODELS (1. Majority baseline 2.TF-IDF Vectorizer + Log
 baseline1_prediction = len(test) * [1] 
 
 #2 Baseline 2
-pipe = joblib.load(DATA_DIR/"pipeline.joblib")
+pipe = joblib.load(BASELINE_PATH)
 
 preds_baseline = pipe.predict(test['sentence'])
 
@@ -34,7 +30,7 @@ FINAL ASSESSMENT
 """
 results = []
 
-predictions_by_model = {'Majority Class Report' : len(test) * [1],
+predictions_by_model = {'Majority Class Report' : baseline1_prediction,
                'TF-IDF LogReg(balanced) Report' : preds_baseline,
                'DistilBERT': preds
                }
