@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from utils import load_split, load_bert, predict_bert, score, LABEL_NAMES, DATA_DIR
+from utils import load_split, load_bert, predict_bert, score, LABEL_NAMES, OUTPUT_DIR
 
 
 
@@ -44,7 +44,7 @@ df_missed["truth"] = df_missed["truth"].map({0: "negative", 1: "neutral", 2: "po
 df_missed["predicted"] = df_missed["predicted"].map({0: "negative", 1: "neutral", 2: "positive"})
 
 #saving to csv file
-df_missed.to_csv(DATA_DIR / "misclassified_val.csv", index=False)
+df_missed.to_csv(OUTPUT_DIR / "misclassified_val.csv", index=False)
 
 """
 MANUALLY ANALYSING THE CONTEXT OF ERRORS  
@@ -63,7 +63,7 @@ I've added a column named 'category' to manually label what type of mismatch hap
 """
 
 
-df_tagged = pd.read_csv(DATA_DIR/"misclassified_val_tagged.csv") #dataset of missed sentences with labels on them
+df_tagged = pd.read_csv(OUTPUT_DIR / "misclassified_val_tagged.csv") #dataset of missed sentences with labels on them
 
 print("\n\nCounts of missclassifications", df_tagged.value_counts("category"), "\n")
 

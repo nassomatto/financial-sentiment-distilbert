@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from utils import DATA_DIR, BASELINE_PATH
+from utils import RAW_DIR, SPLIT_DIR, MODEL_DIR, BASELINE_PATH
 
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.linear_model import LogisticRegression
@@ -28,14 +28,14 @@ RAW DATA PROCESSING
 """
 # Check how many rows each agreement-sentence file contains 
 for tier in ["50Agree", "66Agree", "75Agree", "AllAgree"]:
-    df = pd.read_csv(DATA_DIR / f"Sentences_{tier}.txt", sep="@",
+    df = pd.read_csv(RAW_DIR / f"Sentences_{tier}.txt", sep="@",
                      names=["sentence", "label"], encoding="latin-1")
     print(tier,"  Number of rows ", df.shape[0])
 
 # EDA of Sentence_75. Decided work on 75% fin. experts agree, 
 # as the highest agreement rate and number of rows larger than the "AllAgree" text.
 
-df = pd.read_csv(DATA_DIR / "Sentences_75Agree.txt", sep="@", names=["sentence", "label"], encoding="latin-1")
+df = pd.read_csv(RAW_DIR / "Sentences_75Agree.txt", sep="@", names=["sentence", "label"], encoding="latin-1")
 print("\nAbout Sentences_75Agree.txt - dimensions: ", df.shape,"\n", df.describe(include="object"), "\n")
 df.info()
 
@@ -142,6 +142,7 @@ predictions_1 = pipe.predict(X1_val)
 
 pipe_balanced.fit(X1_train, y_train)
 predictions_2 = pipe_balanced.predict(X1_val)
+MODEL_DIR.mkdir(exist_ok=True)
 joblib.dump(pipe_balanced, BASELINE_PATH)
 
 
@@ -166,6 +167,6 @@ weight = n_samples / (n_classes * n_samples_in_class)
 
 
 "Putting the data splits into seperate .csv files"
-train.to_csv(DATA_DIR / "train.csv", index=False)
-val.to_csv(DATA_DIR / "val.csv", index=False)
-test.to_csv(DATA_DIR / "test.csv", index=False)
+train.to_csv(SPLIT_DIR / "train.csv", index=False)
+val.to_csv(SPLIT_DIR / "val.csv", index=False)
+test.to_csv(SPLIT_DIR / "test.csv", index=False)

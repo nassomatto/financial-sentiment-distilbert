@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import torch
-from utils import DATA_DIR
+from utils import PROJECT_ROOT, SPLIT_DIR
 
 from datasets import load_dataset
 from transformers import (
@@ -19,9 +19,9 @@ from pathlib import Path
 
 
 ds = load_dataset("csv", data_files={
-    "train": str(DATA_DIR / "train.csv"),
-    "val":   str(DATA_DIR / "val.csv"),
-    "test":  str(DATA_DIR / "test.csv"),
+    "train": str(SPLIT_DIR / "train.csv"),
+    "val":   str(SPLIT_DIR / "val.csv"),
+    "test":  str(SPLIT_DIR / "test.csv"),
 })
 
 """
@@ -53,7 +53,7 @@ model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-unca
 """
 TRAINER-SETUP
 """
-training_arguments = TrainingArguments(output_dir = "./results", #creates a new folder if doesn't exist
+training_arguments = TrainingArguments(output_dir = str(PROJECT_ROOT / "results"), #creates a new folder if doesn't exist
                   num_train_epochs = 3, 
                   learning_rate=2e-5, 
                   per_device_train_batch_size=16,
@@ -91,7 +91,7 @@ trainer=Trainer(
 trainer.train()
 trainer.evaluate()
 
-trainer.save_model("./results")
+trainer.save_model(str(PROJECT_ROOT / "results"))
 
 """
 OUTPUT OF THIS FILE

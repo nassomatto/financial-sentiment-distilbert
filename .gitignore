@@ -1,10 +1,11 @@
+# Model weights and training output (large; rebuilt by src/model.py and src/data_eda.py)
 results/
 final_model/
-pipeline.joblib/
+models/
 tmp_trainer/
+
+# Editor, OS and Python clutter
 tempCodeRunnerFile.py
-Sentences_66Agree.txt/
-Sentences_AllAgree.txt/
 __pycache__/
 .DS_Store
 *.zip

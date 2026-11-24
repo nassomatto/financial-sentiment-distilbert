@@ -1,5 +1,5 @@
 import pandas as pd
-from utils import load_split, load_bert, predict_bert, score, DATA_DIR, BASELINE_PATH
+from utils import load_split, load_bert, predict_bert, score, OUTPUT_DIR, BASELINE_PATH
 import joblib
 
 test = load_split('test') # load test set
@@ -40,7 +40,7 @@ for key, value in predictions_by_model.items():
 
 df = pd.DataFrame(results)
 print(df.round(3))      
-df.to_csv(DATA_DIR / "test_results.csv", index=False)
+df.to_csv(OUTPUT_DIR / "test_results.csv", index=False)
 
 
 
@@ -50,6 +50,6 @@ test_preds_df = pd.DataFrame({
       'predicted':preds
 })
 
-test_preds_df.to_csv(DATA_DIR / "test-predictions.csv", index=False)
+test_preds_df.to_csv(OUTPUT_DIR / "test_predictions.csv", index=False)
 
 
