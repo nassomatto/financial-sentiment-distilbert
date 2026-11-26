@@ -30,8 +30,8 @@ FINAL ASSESSMENT
 """
 results = []
 
-predictions_by_model = {'Majority Class Report' : baseline1_prediction,
-               'TF-IDF LogReg(balanced) Report' : preds_baseline,
+predictions_by_model = {'Majority Class' : baseline1_prediction,
+               'TF-IDF LogReg(balanced)' : preds_baseline,
                'DistilBERT': preds
                }
 
